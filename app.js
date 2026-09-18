@@ -68,20 +68,33 @@ const stopBtn = document.querySelector("#stopBtn");
 let current = "ru";
 
 function voicesFor(locale) {
-  const voices = speechSynthesis.getVoices();
+  if (!canSpeak()) return null;
+  const voices = window.speechSynthesis.getVoices();
   const exact = voices.find(v => v.lang.toLowerCase() === locale.toLowerCase());
   const prefix = locale.slice(0,2).toLowerCase();
   return exact || voices.find(v => v.lang.toLowerCase().startsWith(prefix)) || null;
 }
 
+function canSpeak() {
+  return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+}
+
+function stopSpeech() {
+  if (canSpeak()) window.speechSynthesis.cancel();
+}
+
 function speak(text, locale) {
-  speechSynthesis.cancel();
+  if (!canSpeak()) {
+    alert("Die Sprachwiedergabe wird von diesem Browser nicht unterstützt.");
+    return;
+  }
+  stopSpeech();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = locale;
   u.rate = 0.88;
   const voice = voicesFor(locale);
   if (voice) u.voice = voice;
-  speechSynthesis.speak(u);
+  window.speechSynthesis.speak(u);
 }
 
 function render(lang) {
@@ -107,10 +120,21 @@ function render(lang) {
   });
 }
 
-tabs.forEach(t => t.addEventListener("click", () => {
-  speechSynthesis.cancel();
-  render(t.dataset.lang);
-}));
-stopBtn.addEventListener("click", () => speechSynthesis.cancel());
-speechSynthesis.onvoiceschanged = () => {};
+tabs.forEach(t => {
+  t.type = "button";
+  t.addEventListener("click", (event) => {
+    event.preventDefault();
+    const lang = t.getAttribute("data-lang");
+    if (!data[lang]) return;
+    stopSpeech();
+    render(lang);
+  });
+});
+
+stopBtn.addEventListener("click", stopSpeech);
+
+if (canSpeak()) {
+  window.speechSynthesis.onvoiceschanged = () => {};
+}
+
 render(current);

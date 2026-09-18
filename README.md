@@ -14,3 +14,7 @@ Die App nutzt die Web Speech API (`speechSynthesis`). Daher sind keine MP3-Datei
 Welche Stimme tatsächlich abgespielt wird, hängt von den auf dem Gerät installierten Browser-/Systemstimmen ab.
 
 Hinweis: Die Begriffe sind umgangssprachlich, teils vulgär, und regionale Bedeutungen/Aussprache können variieren.
+
+
+## Version 2
+Die Sprachregister wurden für mobile Browser robuster gemacht. Tab-Wechsel funktioniert unabhängig davon, ob Sprachsynthese verfügbar ist. `app.js?v=2` verhindert außerdem, dass GitHub Pages/Safari eine alte JavaScript-Version aus dem Cache lädt.
