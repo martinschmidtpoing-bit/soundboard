@@ -1,0 +1,12 @@
+Russisch Soundboard – Upload ohne Unterordner
+
+Alle fünf Web-App-Dateien gehören direkt in das Hauptverzeichnis des GitHub-Repositories:
+
+- index.html
+- manifest.json
+- sw.js
+- icon-192.png
+- icon-512.png
+
+Bei GitHub Pages anschließend:
+Settings → Pages → Deploy from a branch → main → /(root) → Save
